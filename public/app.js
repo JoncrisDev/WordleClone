@@ -1,3 +1,4 @@
+import {words} from './wordlist.js'
 const tileDisplay = document.querySelector('.tile-container');
 const keyboard = document.querySelector('.key-container');
 
@@ -23,11 +24,11 @@ if (currentTheme) {
     }
 }
 
-let wordle = '' 
+// Random wordle from the wordlist.
+let wordle = words[Math.floor(Math.random() * words.length)].toUpperCase()
 let currentRow = 0
 let currentTile = 0
 let hasGuessedCorrect = false 
-let wordleSet = false
 
 const keys = [
     "Q",
@@ -69,24 +70,6 @@ const guessRows = [
     ['', '', '', '', '']
 ]
 
-// get a new wordle
-const GetWordle = () => {
-    // Rapid API random word 
-    fetch(`http://localhost:3001/word`)
-        .then(response => response.json())
-        .then(json => {
-            SetWordle(json[0])
-            return true 
-    })
-}
-
-// Get the wordle from the backend
-const SetWordle = (target) => {
-    wordle = target.toUpperCase();
-    wordleSet = true
-}
-GetWordle()
-
 // build the tiles
 guessRows.forEach((guessRow, guessRowIdx) => {
     const guessDiv = document.createElement('div');
@@ -114,10 +97,6 @@ keys.forEach(key => {
 
 // on keyboard click
 const handleClick = (key) =>  {
-    if (!wordleSet) {
-        console.log("Wait till the wordle has been set.")
-        return
-    }
     if (key ==="<") {
         deleteLetter()
         return
@@ -138,18 +117,12 @@ const resetRow = () => {
 
 // check to see if we entered a valid five letter word.
 const checkGuess = () => {
-    let this_guess = guessRows[currentRow].join('')
-    // Rapid API word dictionary
-    fetch(`http://localhost:3001/check/?word=${this_guess}`)
-        .then(response => response.json())
-        .then(json => {
-            if (json == 'Entry word not found') {
-                resetRow()
-                return;
-            } else if (json == 'Success') {
-                revealRow()
-            }
-        })
+    let this_guess = guessRows[currentRow].join('').toLowerCase()
+    if (words.includes(this_guess)) {
+        revealRow()
+    } else {
+        resetRow()
+    }
 }
 
 // flip a stlyle based on the guessed letter.
@@ -192,7 +165,6 @@ const revealRow = () => {
     if ((currentRow >= guessRows.length) && !hasGuessedCorrect) {
         displayMsg(`Bad Luck, the correct word was: ${wordle}`, 0)
     }
-
 }
 
 // display a status msg.
@@ -208,7 +180,6 @@ const displayMsg = (msgText, timeout) => {
 }
 
 const addLetter = (letter) => {
-
     if((currentTile < 5) && (letter === 'ENTER')) {
         return
     }
