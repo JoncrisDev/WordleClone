@@ -1,0 +1,31 @@
+{
+  "name": "wordleclone",
+  "version": "1.0.0",
+  "description": "A simple wordle clone",
+  "main": "app.js",
+  "scripts": {
+    "start:backend": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codemonkey147/WordleClone.git"
+  },
+  "keywords": [
+    "javascript",
+    "wordle"
+  ],
+  "author": "codemonkey147",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/codemonkey147/WordleClone/issues"
+  },
+  "homepage": "https://github.com/codemonkey147/WordleClone#readme",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "nodemon": "^2.0.16"
+  }
+}
